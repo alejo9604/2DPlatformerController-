@@ -14,6 +14,7 @@ public class Controller2D : RaycastController {
     public override void Start()
     {
         base.Start();
+        collisions.faceDir = 1;
     }
 
     public void Move(Vector3 velocity, bool standingonPlatform = false)
@@ -24,6 +25,9 @@ public class Controller2D : RaycastController {
         //Store old velocity
         collisions.velocityOld = velocity;
 
+        if (velocity.x != 0)
+            collisions.faceDir = (int) Mathf.Sign(velocity.x);
+
         //Check if is descending slope
         if(velocity.y < 0)
         {
@@ -31,7 +35,7 @@ public class Controller2D : RaycastController {
         }
 
         //Update collision in X and velocity
-        if(velocity.x != 0)
+        //if(velocity.x != 0)
             HorizontalCollision(ref velocity);
 
         //Update collision in Y and velocity
@@ -103,8 +107,14 @@ public class Controller2D : RaycastController {
 
     void HorizontalCollision(ref Vector3 velocity)
     {
-        float directionX = Mathf.Sign(velocity.x);
+        float directionX = collisions.faceDir;
         float rayLength = Mathf.Abs(velocity.x) + skinWidth;
+
+        if(Mathf.Abs( velocity.x ) < skinWidth)
+        {
+            rayLength = 2 * skinWidth;
+        }
+
 
         for (int i = 0; i < horizontalRayCount; i++)
         {
@@ -240,6 +250,8 @@ public class Controller2D : RaycastController {
         public float slopeAngle, slopeAngleOld;
 
         public Vector3 velocityOld;
+
+        public int faceDir;
 
         public void Reset()
         {
