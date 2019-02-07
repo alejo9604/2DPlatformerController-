@@ -57,9 +57,9 @@ public class Player : MonoBehaviour {
         int wallDirX = (controller.collisions.left) ? -1 : 1;
 
 
-        //X Smooth movement
-        float targetvelocityX = input.x * moveSpeed;
-        velocity.x = Mathf.SmoothDamp(velocity.x, targetvelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirbone);
+            if(controller.collisions.below)
+                velocity.y = jumpVelocity;
+        }
 
 
 
