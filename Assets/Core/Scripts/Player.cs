@@ -56,11 +56,8 @@ public class Player : MonoBehaviour {
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         int wallDirX = (controller.collisions.left) ? -1 : 1;
 
-
-            if(controller.collisions.below)
-                velocity.y = jumpVelocity;
-        }
-
+        float targetVelocityX = input.x * moveSpeed;
+        velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? accelerationTimeGrounded : accelerationTimeAirbone);
 
 
         bool wallSliding = false;
